@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.3] - 2026-05-18
+### Changed
+* GUI layout reorganized
+
 ## [v2.2] - 2026-05-16
 ### Added
 * File picker on Setup.
