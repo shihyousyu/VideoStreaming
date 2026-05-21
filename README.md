@@ -7,7 +7,7 @@ An RTSP/RTP-based MJPEG video streaming application with a Tkinter GUI client an
 - **Playback controls**: Play, Pause, Forward (+5s), Backward (-5s)
 - **Variable speed**: 8 levels from 0.5x to 32x via Slow/Fast buttons
 - **Progress bar with time display** (MM:SS / MM:SS), driven by the server-side movie frame number sent via the RTP timestamp field
-- **In-GUI file selection** via a file picker dialog (`.Mjpeg` files)
+- **Server-side file browsing**: the client asks the server which `.Mjpeg` files it has and lets you pick one, so it works across machines
 - **Configurable connection** with server address, RTSP port, and RTP port input fields
 - **Session reset on Teardown** -- play multiple videos in one session without restarting the app
 - **Connect / Disconnect** toggle to manage the TCP/RTSP connection
@@ -47,7 +47,7 @@ No command-line arguments needed; all connection settings are configured in the 
 ## GUI Usage
 
 1. **Connect**: Enter the server's IP/hostname, the RTSP port (must match the server's port), and the RTP port (any unused UDP port on the client machine). Click **Connect**.
-2. **Setup**: Click **Setup** and choose a `.Mjpeg` file. The session starts and the first frame should appear.
+2. **Setup**: Click **Setup**. The client requests the server's available `.Mjpeg` files and shows them in a list -- pick one to start the session. The first frame should appear.
 3. **Play / Pause**: Standard playback controls.
 4. **Backward / Forward**: Jump back / forward by 5 seconds (100 frames).
 5. **Slow / Fast**: Cycle through speed levels: 0.5x, 1.0x, 1.5x, 2.0x, 4.0x, 8.0x, 16.0x, 32.0x (and back).
@@ -61,12 +61,14 @@ The default values (`127.0.0.1` / `25000` / `25001`) target a local-machine setu
 
 For remote streaming, replace the server address with the server's reachable IP. Tailscale IPs (`100.x.x.x`) work transparently -- no protocol changes needed. Just ensure both machines are on the same Tailnet.
 
+Because Setup lists the server's own files (not the client's), the video only needs to exist on the server -- the client never needs a local copy.
+
 ## Version History
 
 See [CHANGELOG.md](./CHANGELOG.md) for detailed per-version changes.
 
 ## Architecture
 
-- **RTSP** (TCP) carries control messages: `SETUP`, `PLAY`, `PAUSE`, `TEARDOWN`, plus custom extensions `FAST`, `SLOW`, `FORWARD`, `BACKWARD`.
+- **RTSP** (TCP) carries control messages: `SETUP`, `PLAY`, `PAUSE`, `TEARDOWN`, plus custom extensions `FAST`, `SLOW`, `FORWARD`, `BACKWARD`, and `LIST` (the client queries the server for its available media files).
 - **RTP** (UDP) carries the MJPEG video payload. Each packet's RTP timestamp field is used to carry the source movie frame number (instead of wall-clock time), enabling the client's progress bar to track the true playback position regardless of network reordering or speed changes.
 - The client uses a single long-lived RTP listener thread that runs from SETUP until TEARDOWN, so seek frames sent during PAUSE can still be received.

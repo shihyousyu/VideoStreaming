@@ -1,5 +1,14 @@
 # Changelog
 
+## [v2.4] - 2026-05-21
+### Added
+* Custom RTSP `LIST` method for browsing server-side files:
+    * Server scans its working directory for `.Mjpeg` files and returns them in a `Files` field
+    * Client shows the list in a dialog so the user picks a file that exists on the server
+
+### Changed
+* Setup now browses the server's files instead of the client's local filesystem. This enables cross-machine streaming -- the previous local file picker only worked when client and server shared a filesystem (same machine).
+
 ## [v2.3] - 2026-05-18
 ### Changed
 * GUI layout reorganized
