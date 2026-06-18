@@ -1,5 +1,11 @@
 # Changelog
 
+## [v3.0] - 2026-06-18
+### Changed
+* Rebuilt from `origin` to refocus on the assignment requirements.
+* Completed client RTSP control and server RTP packetization.
+* Added optional exercises: RTP session statistics, Play/Pause/Stop UI with automatic SETUP, and DESCRIBE.
+
 ## [v2.4] - 2026-05-21
 ### Added
 * Custom RTSP `LIST` method for browsing server-side files:
