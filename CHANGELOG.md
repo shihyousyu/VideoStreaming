@@ -15,7 +15,7 @@
 ### Changed
 * Setup now browses the server's files instead of the client's local filesystem. This enables cross-machine streaming -- the previous local file picker only worked when client and server shared a filesystem (same machine).
 
-## [v2.3] - 2026-05-18
+## [v2.3] - 2026-05-18 **MY BIRTHDAY**
 ### Changed
 * GUI layout reorganized
 
